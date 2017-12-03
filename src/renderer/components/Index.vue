@@ -20,7 +20,15 @@
         var hexo = new Hexo(sysConfig.path, {})
         hexo.init().then(function () {
           hexo.call('generate', {}).then(function () {
-            console.log(arguments)
+            hexo.call('deploy', {}).then(function () {
+              debugger
+              console.log(arguments)
+            }).catch(function (err) {
+              this.$notify.error({
+                message: 'Deploy执行失败，' + err
+              })
+              return hexo.exit(err)
+            })
           }).catch(function (err) {
             this.$notify.error({
               message: 'Generate执行失败，' + err
