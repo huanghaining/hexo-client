@@ -6,6 +6,8 @@
 </template>
 
 <script>
+  var Hexo = require('hexo')
+
   export default {
     data () {
       return {}
@@ -13,6 +15,19 @@
 
     methods: {
       test () {
+        // '/Users/gaoyoubo/code/node/blog.mspring.org'
+        var sysConfig = this.$store.state.Hexo.sysConfig
+        var hexo = new Hexo(sysConfig.path, {})
+        hexo.init().then(function () {
+          hexo.call('generate', {}).then(function () {
+            console.log(arguments)
+          }).catch(function (err) {
+            this.$notify.error({
+              message: 'Generate执行失败，' + err
+            })
+            return hexo.exit(err)
+          })
+        })
       }
     },
 
